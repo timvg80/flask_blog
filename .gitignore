@@ -174,5 +174,8 @@ Session.vim
 # auto-generated tag files
 tags
 
+# PyCharm
+/.idea/
+
 # End of https://www.gitignore.io/api/vim,linux,emacs,python
 
