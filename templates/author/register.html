@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
 
 {% block title %}Author Register{% endblock %}
 
@@ -11,22 +12,14 @@
 
       {{ form.hidden_tag() }}
 
-      <div class="form-group">
-        {{ form.fullname.label }}
-        {{ form.fullname(class_="form-control")|safe }}
-
-        {% if form.fullname.errors %}
-        {% endif %}
-
-      </div>
-
-      <div class="form-group">
-        {{ form.email.label }}
-        {{ form.email(class_="form-control")|safe }}
-
-      </div>
+      {{ render_field(form.fullname, class="form-control") }}
+      {{ render_field(form.email, class="form-control") }}
+      {{ render_field(form.username, class="form-control") }}
+      {{ render_field(form.password, class="form-control") }}
+      {{ render_field(form.confirm, class="form-control") }}
 
       <button type="submit" class="btn btn-success">Register</button>
+
   </div>
 </div>
 
