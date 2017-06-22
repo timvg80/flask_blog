@@ -1,11 +1,7 @@
 from flask_blog import app
-from flask import render_template, redirect, url_for
-from author.form import RegisterForm
-
-
-@app.route('/login')
-def login():
-    return 'Hello User!'
+from flask import render_template, redirect, url_for, session
+from author.form import RegisterForm, LoginForm
+from author.models import Author
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -20,3 +16,15 @@ def register():
 @app.route('/success')
 def success():
     return "Author Registered!!"
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    error = ""
+
+    if form.validate_on_submit():
+        pass
+
+    return render_template('author/login.html', form=form, error=error)
+
