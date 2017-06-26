@@ -1,4 +1,52 @@
-from flask_blog import app
+from flask_blog import app, db
+from flask import render_template, redirect, flash, url_for
+from blog.form import SetupForm
+from author.models import Author
+from blog.models import Blog
+
+
+@app.route('/admin')
+def admin():
+    blogs = Blog.query.count()
+    if blogs == 0:
+        return redirect(url_for('setup'))
+    return render_template('blog/admin.html')
+
+
+@app.route('/setup', methods=['GET', 'POST'])
+def setup():
+    form = SetupForm()
+    error = ""
+    if form.validate_on_submit():
+        author = Author(
+            fullname=form.fullname.data,
+            email=form.email.data,
+            username=form.username.data,
+            password=form.password.data,
+            is_author=True
+        )
+        db.session.add(author)
+        db.session.flush()
+        if author.id:
+            blog = Blog(
+                name=form.name.data,
+                admin=author.id
+            )
+            db.session.add(blog)
+            db.session.flush()
+        else:
+            db.session.rollback()
+            error = "Error creating user"
+
+        if author.id and blog.id:
+            db.session.commit()
+            flash("Blog created")
+            return redirect(url_for('admin'))
+        else:
+            db.session.rollback()
+            error = "Error creating blog"
+
+    return render_template('blog/setup.html', form=form, error=error)
 
 
 @app.route('/')
