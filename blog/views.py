@@ -3,13 +3,21 @@ from flask import render_template, redirect, flash, url_for
 from blog.form import SetupForm
 from author.models import Author
 from blog.models import Blog
+from author.decorators import login_required
 
 
-@app.route('/admin')
-def admin():
+@app.route('/')
+@app.route('/index')
+def index():
     blogs = Blog.query.count()
     if blogs == 0:
         return redirect(url_for('setup'))
+    return 'Hello World!'
+
+
+@app.route('/admin')
+@login_required
+def admin():
     return render_template('blog/admin.html')
 
 
@@ -48,8 +56,3 @@ def setup():
 
     return render_template('blog/setup.html', form=form, error=error)
 
-
-@app.route('/')
-@app.route('/index')
-def index():
-    return 'Hello World!'
