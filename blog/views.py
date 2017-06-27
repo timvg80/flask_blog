@@ -42,17 +42,18 @@ def setup():
             )
             db.session.add(blog)
             db.session.flush()
+
+            if author.id and blog.id:
+                db.session.commit()
+                flash("Blog created")
+                return redirect(url_for('admin'))
+            else:
+                db.session.rollback()
+                error = "Error creating blog"
+
         else:
             db.session.rollback()
             error = "Error creating user"
-
-        if author.id and blog.id:
-            db.session.commit()
-            flash("Blog created")
-            return redirect(url_for('admin'))
-        else:
-            db.session.rollback()
-            error = "Error creating blog"
 
     return render_template('blog/setup.html', form=form, error=error)
 
